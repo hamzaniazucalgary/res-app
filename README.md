@@ -8,6 +8,9 @@ In the project directory, you can run:
 
 ### `npm start`
 
+If you get an error regarding react-scripts, run the following:
+### `npm install react-scripts`
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
