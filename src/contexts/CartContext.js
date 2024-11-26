@@ -15,7 +15,10 @@ const areCustomizationsEqual = (custom1, custom2) => {
   const keys2 = Object.keys(custom2);
   if (keys1.length !== keys2.length) return false;
   for (let key of keys1) {
-    if (custom1[key].sort().join(",") !== custom2[key].sort().join(",")) {
+    if (
+      JSON.stringify(custom1[key].sort()) !==
+      JSON.stringify(custom2[key].sort())
+    ) {
       return false;
     }
   }

@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { CartContext } from "../contexts/CartContext";
 import fallbackImage from "../assets/fallback.png";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import {
   FaStar,
   FaStarHalfAlt,
@@ -22,42 +21,35 @@ import {
   FaFilter,
 } from "react-icons/fa";
 
+// Styled Components
 const MenuItemCard = styled.div`
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
-  max-width: 300px;
-  margin: 10px auto; /* Added vertical margin for spacing */
+  max-width: 280px;
+  margin: 0 auto;
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 576px) {
-    max-width: 100%; /* Full width on mobile */
-    margin: 10px 0; /* Vertical spacing only */
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
 
   .image-wrapper {
     width: 100%;
-    height: 180px; /* Reduced height for mobile */
+    height: 180px;
     background-color: #f9f9f9;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
   }
 
@@ -65,31 +57,22 @@ const MenuItemCard = styled.div`
     padding: 15px;
     display: flex;
     flex-direction: column;
-    flex-grow: 1; /* Allows the details section to grow and fill space */
-    text-align: left;
-
-    @media (max-width: 576px) {
-      padding: 10px; /* Reduced padding on mobile */
-    }
+    flex-grow: 1;
 
     h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #333;
       margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 6px;
-
-      @media (max-width: 576px) {
-        font-size: 1rem;
-      }
     }
 
     .tags {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      justify-items: center; /* Center tags within their grid cell */
+      margin-bottom: 8px;
 
       span {
         display: flex;
@@ -97,53 +80,37 @@ const MenuItemCard = styled.div`
         gap: 3px;
         background-color: #eef2f3;
         color: #4a90e2;
-        padding: 3px 7px;
+        padding: 4px 8px;
         border-radius: 15px;
-        font-size: 0.7rem;
-
-        @media (max-width: 576px) {
-          font-size: 0.6rem;
-          padding: 2px 5px;
-        }
+        font-size: 0.75rem;
       }
     }
 
     .rating {
       display: flex;
       align-items: center;
-      gap: 3px;
-      margin-top: 8px;
+      gap: 5px;
       margin-bottom: 8px;
 
       .stars {
         display: flex;
         align-items: center;
-        gap: 1px;
+        gap: 2px;
       }
 
       .num-reviews {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         color: #666;
-      }
-
-      @media (max-width: 576px) {
-        .num-reviews {
-          font-size: 0.6rem;
-        }
       }
     }
 
     .description {
-      margin: 5px 0;
       font-size: 0.85rem;
       color: #666;
+      margin-bottom: 8px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-
-      @media (max-width: 576px) {
-        font-size: 0.75rem;
-      }
 
       .read-more {
         color: #4a90e2;
@@ -151,7 +118,6 @@ const MenuItemCard = styled.div`
         text-decoration: underline;
         font-weight: bold;
         margin-left: 5px;
-        flex-shrink: 0; /* Prevents the read-more from wrapping */
 
         &:hover {
           color: #357ab8;
@@ -159,38 +125,29 @@ const MenuItemCard = styled.div`
 
         &:focus {
           outline: 2px solid rgba(74, 144, 226, 0.5);
-          outline-offset: 0px;
-        }
-
-        @media (max-width: 576px) {
-          font-size: 0.7rem;
         }
       }
     }
 
     .price {
       font-weight: bold;
-      font-size: 1.1rem;
-      color: #4a90e2;
-      margin-top: 8px;
-
-      @media (max-width: 576px) {
-        font-size: 1rem;
-      }
+      font-size: 1rem;
+      color: #333;
+      margin-top: auto;
     }
   }
 `;
 
 const AddToCartButton = styled.button`
-  margin-top: auto; /* Pushes the button to the bottom of the card */
-  padding: 10px 15px;
+  margin-top: 10px;
+  padding: 10px 0;
   background-color: #4a90e2;
   border: none;
-  border-radius: 5px;
+  border-radius: 0 0 12px 12px;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   font-size: 0.9rem;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #357ab8;
@@ -203,16 +160,10 @@ const AddToCartButton = styled.button`
 
   &:focus {
     outline: 2px solid rgba(74, 144, 226, 0.5);
-    outline-offset: 0px;
-  }
-
-  @media (max-width: 576px) {
-    padding: 8px 12px;
-    font-size: 0.8rem;
   }
 `;
 
-// Styled Components for the Customization Modal
+// Modal Components
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -227,14 +178,14 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background: ${({ theme }) => theme.modalBg || "#fff"};
+  background: #fff;
   padding: 25px;
-  border-radius: ${({ theme }) => theme.borderRadius || "10px"};
+  border-radius: 10px;
   width: 90%;
-  max-width: 450px;
+  max-width: 500px;
   box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-out;
   position: relative;
+  animation: fadeIn 0.3s ease-out;
   display: flex;
   flex-direction: column;
 
@@ -253,23 +204,14 @@ const ModalContent = styled.div`
     margin-top: 0;
     color: #333;
     font-size: 1.4rem;
-
-    @media (max-width: 576px) {
-      font-size: 1.2rem;
-    }
   }
 
   .customization-options {
     margin: 15px 0;
-    text-align: left;
 
     h4 {
       font-size: 1rem;
       margin-bottom: 10px;
-
-      @media (max-width: 576px) {
-        font-size: 0.9rem;
-      }
     }
 
     label {
@@ -279,16 +221,7 @@ const ModalContent = styled.div`
       margin-bottom: 8px;
 
       input {
-        transform: scale(1.1); /* Larger checkboxes/radio buttons for touch */
-      }
-
-      @media (max-width: 576px) {
-        flex-direction: column;
-        align-items: flex-start;
-
-        input {
-          margin-right: 0;
-        }
+        transform: scale(1.1);
       }
     }
   }
@@ -298,11 +231,6 @@ const ModalContent = styled.div`
     justify-content: flex-end;
     gap: 10px;
     margin-top: 15px;
-
-    @media (max-width: 576px) {
-      flex-direction: column;
-      align-items: stretch;
-    }
   }
 `;
 
@@ -314,21 +242,14 @@ const CloseButton = styled.button`
   border: none;
   font-size: 22px;
   cursor: pointer;
-  color: ${({ theme }) => theme.textColor || "#333"};
+  color: #333;
 
   &:hover {
-    color: ${({ theme }) => theme.accentColor || "#4a90e2"};
+    color: #4a90e2;
   }
 
   &:focus {
     outline: 2px solid rgba(74, 144, 226, 0.5);
-    outline-offset: 0px;
-  }
-
-  @media (max-width: 576px) {
-    font-size: 18px;
-    top: 10px;
-    right: 10px;
   }
 `;
 
@@ -353,13 +274,6 @@ const ConfirmButton = styled.button`
 
   &:focus {
     outline: 2px solid rgba(74, 144, 226, 0.5);
-    outline-offset: 0px;
-  }
-
-  @media (max-width: 576px) {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    width: 100%; /* Make buttons full-width on small screens */
   }
 `;
 
@@ -379,29 +293,22 @@ const CancelButton = styled.button`
 
   &:focus {
     outline: 2px solid rgba(204, 204, 204, 0.7);
-    outline-offset: 0px;
-  }
-
-  @media (max-width: 576px) {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    width: 100%; /* Make buttons full-width on small screens */
   }
 `;
 
-// Mapping tags to icons
+// Tag Icon Mapping
 const tagIconMapping = {
   Vegan: <FaLeaf />,
   Vegetarian: <FaLeaf />,
   Spicy: <FaFire />,
-  "Gluten-Free": <FaLeaf />, // aligned with the previous mapping
+  "Gluten-Free": <FaLeaf />,
   Alcoholic: <FaWineBottle />,
-  "Non-Alcoholic": <FaGlassCheers />, // aligned with the previous mapping
-  Sweet: <FaCookie />, // aligned with the previous mapping
-  Breakfast: <FaCoffee />, // aligned with the previous mapping
-  Lunch: <FaHamburger />, // aligned with the previous mapping
+  "Non-Alcoholic": <FaGlassCheers />,
+  Sweet: <FaCookie />,
+  Breakfast: <FaCoffee />,
+  Lunch: <FaHamburger />,
   Dinner: <FaUtensils />,
-  Appetizer: <FaGlassMartiniAlt />, // aligned with the previous mapping
+  Appetizer: <FaGlassMartiniAlt />,
   Miscellaneous: <FaFilter />,
 };
 
@@ -420,7 +327,6 @@ const MenuItem = React.memo(
     const [imgSrc, setImgSrc] = useState(image);
     const { addItem } = useContext(CartContext);
     const [isAdding, setIsAdding] = useState(false);
-    const navigate = useNavigate();
 
     // Customization State
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -435,10 +341,8 @@ const MenuItem = React.memo(
 
     const handleAddToCartClick = () => {
       if (customizations && customizations.length > 0) {
-        // Open customization modal
         setIsModalOpen(true);
       } else {
-        // No customizations, add directly
         handleAddItem({});
       }
     };
@@ -471,13 +375,11 @@ const MenuItem = React.memo(
           ? prev[category]
           : [];
         if (currentOptions.includes(option)) {
-          // Remove the option
           return {
             ...prev,
             [category]: currentOptions.filter((opt) => opt !== option),
           };
         } else {
-          // Add the option
           return {
             ...prev,
             [category]: [...currentOptions, option],
@@ -540,9 +442,12 @@ const MenuItem = React.memo(
           </div>
           <div className="details">
             <h3>
-              {name}{" "}
+              {name}
               {(tags.includes("Vegan") || tags.includes("Vegetarian")) && (
-                <FaLeaf title="Vegetarian/Vegan" />
+                <FaLeaf
+                  title="Vegetarian/Vegan"
+                  aria-label="Vegetarian/Vegan"
+                />
               )}
             </h3>
             <div className="tags">
@@ -559,8 +464,8 @@ const MenuItem = React.memo(
             <p className="description">
               {isDescriptionExpanded
                 ? description
-                : getTruncatedDescription(description, 6)}
-              {description.split(" ").length > 6 && (
+                : getTruncatedDescription(description, 12)}
+              {description.split(" ").length > 12 && (
                 <span
                   className="read-more"
                   onClick={toggleDescription}
@@ -605,56 +510,45 @@ const MenuItem = React.memo(
                 &times;
               </CloseButton>
               <h2>Customize Your {name}</h2>
-              {customizations &&
-              Array.isArray(customizations) &&
-              customizations.length > 0 ? (
+              {customizations && customizations.length > 0 ? (
                 customizations.map((customization, index) => (
                   <div key={index} className="customization-options">
                     <h4>{customization.name}</h4>
-                    {Array.isArray(customization.options) ? (
-                      customization.options.map((option, idx) => (
-                        <label key={idx}>
-                          <input
-                            type={
-                              customization.removable ? "checkbox" : "radio"
-                            }
-                            name={customization.name}
-                            value={option}
-                            checked={
-                              customization.removable
-                                ? Array.isArray(
-                                    selectedOptions[customization.name]
-                                  ) &&
-                                  selectedOptions[customization.name].includes(
-                                    option
-                                  )
-                                : selectedOptions[customization.name] === option
-                            }
-                            onChange={() =>
-                              customization.removable
-                                ? handleCustomizationChange(
-                                    customization.name,
-                                    option
-                                  )
-                                : setSelectedOptions((prev) => ({
-                                    ...prev,
-                                    [customization.name]: option,
-                                  }))
-                            }
-                            aria-label={
-                              customization.removable
-                                ? `Toggle ${option}`
-                                : `Select ${option}`
-                            }
-                          />
-                          {customization.removable
-                            ? ` Remove ${option}`
-                            : ` Add ${option}`}
-                        </label>
-                      ))
-                    ) : (
-                      <span>No options available</span>
-                    )}
+                    {customization.options.map((option, idx) => (
+                      <label key={idx}>
+                        <input
+                          type={customization.removable ? "checkbox" : "radio"}
+                          name={customization.name}
+                          value={option}
+                          checked={
+                            customization.removable
+                              ? selectedOptions[customization.name]?.includes(
+                                  option
+                                )
+                              : selectedOptions[customization.name] === option
+                          }
+                          onChange={() =>
+                            customization.removable
+                              ? handleCustomizationChange(
+                                  customization.name,
+                                  option
+                                )
+                              : setSelectedOptions((prev) => ({
+                                  ...prev,
+                                  [customization.name]: option,
+                                }))
+                          }
+                          aria-label={
+                            customization.removable
+                              ? `Toggle ${option}`
+                              : `Select ${option}`
+                          }
+                        />
+                        {customization.removable
+                          ? ` Remove ${option}`
+                          : ` Add ${option}`}
+                      </label>
+                    ))}
                   </div>
                 ))
               ) : (
