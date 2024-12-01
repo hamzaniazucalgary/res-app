@@ -1,7 +1,7 @@
 {
   "name": "res-app",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "homepage": "https://hamzaniazucalgary.github.io/res-app",
   "dependencies": {
     "@emotion/react": "^11.13.5",
