@@ -1,8 +1,8 @@
 {
   "name": "res-app",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "https://hamzaniazucalgary.github.io/res-app/index.html",
+  "private": false,
+  "homepage": "https://hamzaniazucalgary.github.io/res-app",
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
